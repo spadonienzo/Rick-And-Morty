@@ -8,6 +8,8 @@ import Form from './components/Form/Form';
 import Favorites from './components/Favorites';
 import { useState, useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import { removeFav } from './redux/actions';
 
 const URL = 'http://localhost:3001/rickandmorty/login';
 
@@ -15,6 +17,7 @@ function App() {
    
    const location = useLocation()
    const navigate = useNavigate()
+   const dispatch = useDispatch()
    const [characters, setCharacters] = useState([])
    const [access, setAccess] = useState(false)
    
@@ -47,11 +50,9 @@ function App() {
    }
 
    const onClose = (id) => {
-      const charactersfiltered = characters.filter(character => character.id !== id)
-      setCharacters(charactersfiltered)
-
+      setCharacters(characters.filter((personaje) => personaje.id !== id));
+      dispatch(removeFav(id))
    }
-
    const logout = () => {
       setAccess(false)
    }

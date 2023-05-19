@@ -1,26 +1,25 @@
-let myFavorites = []
+const { Favorite } = require('../DB_connection')
 
-const postFav = (req, res) => {
+const postFav = async (req, res) => {
+    const {name,origin,status,image,species,gender} = req.body
     try {
-        const character = req.body
-        const characterFound = myFavorites.find(fav => fav.id === character.id)
-    
-        if(characterFound) throw Error('El personaje ya existe en favoritos')
-        
-        myFavorites.push(character)
-
-        return res.status(200).json(myFavorites)
-                
+        if(!name || !origin || !status || !species || !gender) return res.status(401).send('Faltan datos')
+        await Favorite.findOrCreate({where: {name,origin,status,image,species,gender}})
+        const favorite = await Favorite.findAll()
+        return res.status(200).json(favorite)
     }catch (error) {
-        return res.status(404).send(error.message)
+        return res.status(500).json({message:error.message})
     }
 }
-const deleteFav = (req, res) => {
+const deleteFav = async (req, res) => {
     const {id} = req.params
-
-    myFavorites = myFavorites.filter((favorite) => favorite.id !== +id)
-
-    return res.status(200).json(myFavorites)
+    try {
+        await Favorite.destroy({where: {id:id}})
+        const favs = Favorite.findAll()
+        return res.status(200).json(favs)
+    } catch (error) {
+        return res.status(500).json({message:error.message})
+    }
 }
 
 module.exports = {

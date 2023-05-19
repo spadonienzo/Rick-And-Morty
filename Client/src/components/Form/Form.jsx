@@ -4,21 +4,21 @@ import './Form.css'
 
 const Form = ({login}) => {
 
-    const [userData, setData] = useState({
-        email:'',password:''
-    })
-
-
     const [errors, setErrors] = useState({})
-
+    const [userData, setData] = useState({
+        email:'',
+        password:''
+    })
 
     const handleChange = (event) => {
         setData({
-            ...userData, [event.target.name] : event.target.value
+            ...userData, 
+            [event.target.name] : event.target.value
         })
 
         setErrors(validation({
-            ...userData, [event.target.name] : event.target.value
+            ...userData, 
+            [event.target.name] : event.target.value
         }))
     }
 
