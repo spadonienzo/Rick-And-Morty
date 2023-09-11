@@ -1,13 +1,11 @@
+require('dotenv').config();
+const { PORT } = process.env;
 const express = require('express');
 const server = express();
 const router = require('./routes/index');
 const { conn } = require('./DB_connection')
 
-const PORT = 3001;
-
 server.use(express.json());
-
-
 server.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', 'true');
@@ -22,13 +20,13 @@ server.use((req, res, next) => {
     next();
 });
     
-server.use('/rickandmorty', router);
+server.use('/', router);
 
 conn
   .sync({ alter: true })
   .then(() => {
     server.listen(PORT, () => {
-      console.log(`Servidor escuchando el puerto ${PORT}`);
+      console.log(`Server listening on port: ${PORT}`);
     });
   })
   .catch((error) => {

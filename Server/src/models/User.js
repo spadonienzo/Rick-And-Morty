@@ -8,6 +8,10 @@ module.exports = (sequelize) => {
             primaryKey: true,
             allowNull: false
         },
+        name:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         email: {
             type: DataTypes.STRING,
             isEmail: true,
@@ -18,7 +22,5 @@ module.exports = (sequelize) => {
             allowNull: false
         }
     },
-    {
-        timestamps: false,
-    })
+    {timestamps: false});
 }

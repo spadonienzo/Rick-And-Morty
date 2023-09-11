@@ -1,26 +1,11 @@
-const {login} = require('../controllers/login')
-const {getCharById} = require('../controllers/getCharById')
-const {postFav, deleteFav} = require('../controllers/handleFavorites')
-const postUser = require('../controllers/postUser')
+const { Router } = require("express");
 
-const router = require('express').Router()
+const userRouter = require("./userRouter");
+const characterRouter = require("./characterRouter");
 
-router.get('/character/:id', getCharById)
+const mainRouter = Router();
 
-router.get('/login',login)
+mainRouter.use("/users", userRouter);
+mainRouter.use("/characters", characterRouter);
 
-router.post('/login', async (req,res) => {
-    try {
-        const { email, password } = req.body
-        const newUser = await postUser({email,password})
-        res.status(200).json(newUser)
-    } catch (error) {
-        res.status(404).send(error.message)
-    }
-})
-
-router.post('/fav',postFav)
-
-router.delete('/fav/:id', deleteFav)
-
-module.exports = router
+module.exports = mainRouter;
