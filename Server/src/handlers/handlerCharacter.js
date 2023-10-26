@@ -1,9 +1,24 @@
+const { Character } = require("../DB_connection");
+
 const {
   getCharacters,
   getCharactersByName,
   postCharacter,
   deleteCharacter,
+  likeCharacter,
+  dislikeCharacter,
+  getFavorites,
 } = require("../controllers/controllersCharacter");
+
+const saveApidata = async (req, res) => {
+  try {
+    const response = await getCharacters();
+    await Character.bulkCreate(response);
+    res.status(200).json({ message: "Creacion exitosa" });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
 
 const handlerGetCharacters = async (req, res) => {
   try {
@@ -49,7 +64,6 @@ const handlerPostCharacter = async (req, res) => {
 
 const handlerDeleteCharacter = async (req, res) => {
   const { id } = req.params;
-  console.log("id handler", id);
   try {
     const response = await deleteCharacter(id);
     res
@@ -60,9 +74,47 @@ const handlerDeleteCharacter = async (req, res) => {
   }
 };
 
+const handlerLikeCharacter = async (req, res) => {
+  const { userId, characterId } = req.body; // Assuming the IDs are sent in the request body
+
+  try {
+    const response = likeCharacter(userId, characterId);
+    res.status(200).json({ message: "Character liked successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ error: error.message });
+  }
+};
+
+const handlerDislikeCharacter = async (req, res) => {
+  const { userId, characterId } = req.body;
+  console.log(userId, characterId);
+  try {
+    const response = dislikeCharacter(userId, characterId);
+    res.status(200).json({ message: "Character disliked successfully" });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+const handleGetFavorites = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await getFavorites(id);
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ error: error.message });
+  }
+};
+
 module.exports = {
+  saveApidata,
   handlerGetCharacters,
   handlerGetCharacterById,
   handlerPostCharacter,
   handlerDeleteCharacter,
+  handlerLikeCharacter,
+  handlerDislikeCharacter,
+  handleGetFavorites,
 };

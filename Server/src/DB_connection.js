@@ -17,9 +17,11 @@ LikesModel(sequelize);
 const { User, Character, Likes } = sequelize.models;
 User.belongsToMany(Character, { through: Likes });
 Character.belongsToMany(User, { through: Likes });
+Likes.belongsTo(Character, { foreignKey: "CharacterId" });
 
 module.exports = {
   User,
   Character,
+  Likes,
   conn: sequelize,
 };

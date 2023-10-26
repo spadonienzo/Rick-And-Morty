@@ -1,48 +1,50 @@
 const axios = require("axios");
-const { Character } = require("../DB_connection");
+const { Character, User, Likes } = require("../DB_connection");
 
 const getCharacters = async () => {
-  let i = 1;
-  let characters = []; //[Promise<pending>,Promise<pending>,Promise<pending>,Promise<pending>,Promise<pending>]
+  // let i = 1;
+  // let characters = []; //[Promise<pending>,Promise<pending>,Promise<pending>,Promise<pending>,Promise<pending>]
 
-  while (i < 6) {
-    let apiData = await axios(
-      `https://rickandmortyapi.com/api/character?page=${i}`
-    );
+  // while (i < 6) {
+  //   let apiData = await axios(
+  //     `https://rickandmortyapi.com/api/character?page=${i}`
+  //   );
 
-    //El llamado a la api me devuelve una promesa, entonces lo que tengo en charactaers un array de promesas
-    characters.push(apiData);
-    i++;
-  }
+  //   //El llamado a la api me devuelve una promesa, entonces lo que tengo en charactaers un array de promesas
+  //   characters.push(apiData);
+  //   i++;
+  // }
 
-  //Aqui voy a tener un array donde va a estar la información de la api, le aplico promise all para que se resuelvan todas las promesas. Y después lo mapeo.
-  characters = (await Promise.all(characters)).map((res) =>
-    res.data.results.map((char) => {
-      return {
-        id: char.id,
-        name: char.name,
-        status: char.status,
-        species: char.species,
-        gender: char.gender,
-        origin: char.origin.name,
-        image: char.image,
-        created: false,
-      };
-    })
-  );
+  // //Aqui voy a tener un array donde va a estar la información de la api, le aplico promise all para que se resuelvan todas las promesas. Y después lo mapeo.
+  // characters = (await Promise.all(characters)).map((res) =>
+  //   res.data.results.map((char) => {
+  //     return {
+  //       id: char.id,
+  //       name: char.name,
+  //       status: char.status,
+  //       species: char.species,
+  //       gender: char.gender,
+  //       origin: char.origin.name,
+  //       image: char.image,
+  //       created: false,
+  //     };
+  //   })
+  // );
 
-  //AL APLICAR DOS MAP OBTENGO UN ARRAY DENTRO DE OTRO ARRAY. Una forma de solucinarlo es:
+  // //AL APLICAR DOS MAP OBTENGO UN ARRAY DENTRO DE OTRO ARRAY. Una forma de solucinarlo es:
 
-  let apiCharacters = [];
-  characters.map((char) => {
-    apiCharacters = apiCharacters.concat(char);
-  });
+  // let apiCharacters = [];
+  // characters.map((char) => {
+  //   apiCharacters = apiCharacters.concat(char);
+  // });
 
   // DB
 
   let dbCharacters = await Character.findAll();
 
-  return [...apiCharacters, ...dbCharacters];
+  // return apiCharacters;
+
+  return dbCharacters;
 };
 
 const getCharactersByName = async (name) => {
@@ -75,11 +77,39 @@ const postCharacter = async ({
 };
 
 const deleteCharacter = async (id) => {
-  console.log(id);
+  console.log("entro al id");
   const character = await Character.findOne({ where: { id } });
   if (!character) throw new Error("No character matches that id");
   character.destroy();
   return;
+};
+
+const likeCharacter = async (userId, characterId) => {
+  const user = await User.findByPk(userId);
+  const character = await Character.findByPk(characterId);
+  if (!user || !character) throw Error("User or Character not found");
+  await Likes.create({ UserId: userId, CharacterId: characterId });
+  return;
+};
+
+const dislikeCharacter = async (userId, characterId) => {
+  const like = await Likes.findOne({
+    where: { UserId: userId, CharacterId: characterId },
+  });
+  if (!like) throw Error("Like association not found");
+  await like.destroy();
+  return;
+};
+
+const getFavorites = async (id) => {
+  const likedCharacters = await Likes.findAll({
+    where: { UserId: id },
+    include: Character,
+  });
+
+  const characters = likedCharacters.map((like) => like.Character);
+
+  return characters;
 };
 
 module.exports = {
@@ -87,4 +117,7 @@ module.exports = {
   getCharactersByName,
   postCharacter,
   deleteCharacter,
+  likeCharacter,
+  dislikeCharacter,
+  getFavorites,
 };

@@ -1,0 +1,14 @@
+.nav {
+  height: 50px;
+}
+
+.logo {
+  height: 80px;
+  width: 100px;
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+.font {
+  font-weight: 600;
+}

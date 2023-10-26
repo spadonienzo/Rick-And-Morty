@@ -17,7 +17,14 @@ const createUser = async ({ name, email, password }) => {
   return user;
 };
 
+const getUsers = async () => {
+  const users = await User.findAll();
+  if (!users) throw Error("No users found in the database");
+  return users;
+};
+
 module.exports = {
   login,
   createUser,
+  getUsers,
 };

@@ -1,0 +1,32 @@
+.container {
+  width: 350px;
+  text-align: left;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.p {
+  color: white;
+}
+
+.button {
+  color: white;
+  background-color: black;
+  border: none;
+  width: 150px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.button:hover {
+  background-color: #414141; /* Change button background color on hover */
+  transition: 0.5s;
+  transform: scale(1.1);
+}
+
+.buttons {
+  margin: auto;
+  margin-top: 15px;
+}

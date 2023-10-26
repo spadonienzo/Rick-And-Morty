@@ -1,76 +1,34 @@
-import './App.css';
-import axios from 'axios'
-import Cards from './components/Cards/Cards.jsx';
-import Nav from './components/Nav/Nav.jsx';
-import About from './components/About';
-import Detail from './components/Detail';
-import Form from './components/Form/Form';
-import Favorites from './components/Favorites';
-import { useState, useEffect } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
-import { removeFav } from './redux/actions';
+import React from "react";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Landing from "./components/Landing/Landing";
+import Home from "./components/Home/Home";
+import About from "./components/About/About";
+import Detail from "./components/Detail/Detail";
+import Favorites from "./components/Favorites/Favorites";
+import Login from "./components/Login/Login";
+import Signup from "./components/Signup/Signup";
+import { Routes, Route, useLocation } from "react-router-dom";
+import Nav from "./components/Nav/Nav";
 
-const URL = 'http://localhost:3001/rickandmorty/login';
+const App = () => {
+  const location = useLocation();
+  const hideNavOnRoutes = ["/", "/signup", "/login"];
 
-function App() {
-   
-   const location = useLocation()
-   const navigate = useNavigate()
-   const dispatch = useDispatch()
-   const [characters, setCharacters] = useState([])
-   const [access, setAccess] = useState(false)
-   
-   const login = async (userData) => {
-      try {
-         const { email, password } = userData;
-         const {data} = await axios(URL + `?email=${email}&password=${password}`)
-         const { access } = data;
-         setAccess(access);
-         access && navigate('/home');
-
-      } catch (error) {
-         console.log(error.message);
-      }
-   }
-   
-   useEffect(() => {
-      !access && navigate('/');
-   }, [access, navigate]);
-
-   const onSearch= async (id) => {
-      try {
-         const {data} = await axios(`http://localhost:3001/rickandmorty/character/${id}`)
-         if (data.name) {
-            setCharacters((oldChars) => [...oldChars, data]);
-         }
-      } catch (error) {
-         alert('No hay personajes con este ID!')
-      }
-   }
-
-   const onClose = (id) => {
-      setCharacters(characters.filter((personaje) => personaje.id !== id));
-      dispatch(removeFav(id))
-   }
-   const logout = () => {
-      setAccess(false)
-   }
-
-   return (
-      <div className='App'>
-            {
-               location.pathname !==  '/' && <Nav onSearch={onSearch} logout={logout}/>
-            }
-         <Routes>
-            <Route path='/' element= {<Form login={login}/>}/>
-            <Route path='/home' element = {<Cards characters={characters} onClose={onClose}/>}/>
-            <Route path='/about' element = {<About/>}/>
-            <Route path='/detail/:id' element = {<Detail/>}/>
-            <Route path='/favorites' element= {<Favorites/>}/>
-         </Routes>
-      </div>
-   );
-}
+  return (
+    <div className="App">
+      {hideNavOnRoutes.includes(location.pathname) ? null : <Nav />}
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/detail/:id" element={<Detail />} />
+        <Route path="/favorites" element={<Favorites />} />
+      </Routes>
+    </div>
+  );
+};
 
 export default App;

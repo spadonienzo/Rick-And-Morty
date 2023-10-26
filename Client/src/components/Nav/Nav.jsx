@@ -1,28 +1,51 @@
-import Searchbar from '../Searchbar/SearchBar'
-import { Link } from 'react-router-dom'
+import style from "./Nav.module.css";
+import Container from "react-bootstrap/Container";
+import Navs from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import logoNav from "../../resources/logoNav.png";
+import { Image } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/actions";
 
-const Nav = ({onSearch, logout}) => {
-    return (
-        <div>
-            <nav>
+const Nav = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = JSON.parse(window.localStorage.getItem("user"));
 
-                <button>
-                    <Link to='/home'>Home</Link>
-                </button>
-                <button>
-                    <Link to='/about'>About</Link>
-                </button>
-                <button>
-                    <Link to='/favorites'>Favorites</Link>
-                </button>
-                <button onClick={logout}>
-                    <Link to='/'>Logout</Link>
-                </button>
+  const handleLogOut = () => {
+    dispatch(logout());
+    navigate("/");
+  };
 
-                <Searchbar onSearch={onSearch}/>
-            </nav>    
-        </div>
-    )
-}
+  return (
+    <Navbar fixed="top" bg="white" variant="light" className={style.nav}>
+      <Container>
+        <Navbar.Brand href="/home">
+          <Image className={style.logo} src={logoNav} />
+        </Navbar.Brand>
+        <Navbar.Collapse className="justify-content-end">
+          <Navs className="me-auto">
+            <Navs.Link href="/home" className={style.font}>
+              Home
+            </Navs.Link>
+            <Navs.Link href="/about" className={style.font}>
+              About
+            </Navs.Link>
+            <Navs.Link href="/favorites" className={style.font}>
+              Favorites
+            </Navs.Link>
+          </Navs>
+        </Navbar.Collapse>
+        <NavDropdown className={style.font} title={user?.name}>
+          <NavDropdown.Item className={style.font} onClick={handleLogOut}>
+            Log Out
+          </NavDropdown.Item>
+        </NavDropdown>
+      </Container>
+    </Navbar>
+  );
+};
 
-export default Nav
+export default Nav;

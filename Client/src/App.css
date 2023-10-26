@@ -1,9 +1,31 @@
+body {
+  font-family: "Poppins", sans-serif;
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif; */
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(50deg, #021309, #092a0f, #021309, black);
+  /* background: linear-gradient(50deg, #020213, #16123d, #080a25, black); */
+  background-size: 400% 400%;
+  animation: cambiar 10s ease infinite;
+}
+
+@keyframes cambiar {
+  0% {
+    background-position: 0 70%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 70%;
+  }
+}
+
 .App {
-   text-align: center;
-   background-image: url("cool-rick-and-morty-2qy1xyshw0h9uxk4.jpg");
-   background-size: cover;
-   background-position: center;
-   background-repeat: no-repeat;
-   height: 100vh;
-    
+  margin: 0 auto;
+  width: 100%;
 }
