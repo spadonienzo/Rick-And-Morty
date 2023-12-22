@@ -1,20 +1,51 @@
 const { User } = require("../DB_connection");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+require("dotenv").config();
+const { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
+
+const createUser = async ({ name, email, password }) => {
+  const passwordHashed = await bcrypt.hash(password, 8);
+  const [user, created] = await User.findOrCreate({
+    where: { email },
+    defaults: {
+      name,
+      email,
+      password: passwordHashed,
+    },
+  });
+  if (!created) throw new Error("User already exists");
+  const token = jwt.sign(
+    {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    },
+    ACCESS_TOKEN_SECRET,
+    { expiresIn: 86400 }
+  );
+  return token;
+};
 
 const login = async ({ email, password }) => {
   if (!email || !password) throw Error("Missing data");
   const user = await User.findOne({ where: { email } });
-  if (!user) throw Error("User not found");
-  if (user.password === password) {
-    return { name: user.name, id: user.id, password: user.password };
-  } else {
-    throw Error("Invalid password");
-  }
-};
+  const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!isValidPassword || user.email !== email)
+    throw Error("Wrong user or password");
 
-const createUser = async ({ name, email, password }) => {
-  if (!email || !password || !name) throw Error("Faltan datos");
-  const user = await User.create({ name, email, password });
-  return user;
+  const token = jwt.sign(
+    {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    },
+    ACCESS_TOKEN_SECRET,
+    { expiresIn: 86400 }
+  );
+  return token;
 };
 
 const getUsers = async () => {

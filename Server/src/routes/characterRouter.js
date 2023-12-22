@@ -10,6 +10,7 @@ const {
   handlerLikeCharacter,
   handlerDislikeCharacter,
   handleGetFavorites,
+  handleFilterCharacters,
 } = require("../handlers/handlerCharacter");
 
 //  GET

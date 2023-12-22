@@ -5,11 +5,10 @@ const {
 } = require("../controllers/controllersUser");
 
 const handlerPostUser = async (req, res) => {
-  console.log(req.body);
   const { name, email, password } = req.body;
   try {
-    const newUser = await createUser({ name, email, password });
-    res.status(200).json(newUser);
+    const token = await createUser({ name, email, password });
+    res.status(200).header("authorization", `Bearer ${token}`).json(token);
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
@@ -18,8 +17,8 @@ const handlerPostUser = async (req, res) => {
 const handlerLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await login({ email, password });
-    if (user) return res.status(200).json(user);
+    const token = await login({ email, password });
+    res.status(200).header("authorization", `Bearer ${token}`).json(token);
   } catch (error) {
     res.status(404).json({ error: error.message });
   }

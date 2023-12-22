@@ -36,6 +36,9 @@ const Nav = () => {
             <Navs.Link href="/favorites" className={style.font}>
               Favorites
             </Navs.Link>
+            <Navs.Link href="/create" className={style.font}>
+              Create
+            </Navs.Link>
           </Navs>
         </Navbar.Collapse>
         <NavDropdown className={style.font} title={user?.name}>

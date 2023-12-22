@@ -10,6 +10,7 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Nav from "./components/Nav/Nav";
+import Create from "./components/Create/Create";
 
 const App = () => {
   const location = useLocation();
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/create" element={<Create />} />
       </Routes>
     </div>
   );

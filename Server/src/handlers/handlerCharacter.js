@@ -8,6 +8,7 @@ const {
   likeCharacter,
   dislikeCharacter,
   getFavorites,
+  filterCharacters,
 } = require("../controllers/controllersCharacter");
 
 const saveApidata = async (req, res) => {
@@ -46,6 +47,7 @@ const handlerGetCharacterById = async (req, res) => {
 
 const handlerPostCharacter = async (req, res) => {
   const { name, status, species, gender, origin, image } = req.body;
+  console.log(req.body);
   try {
     const newCharacter = await postCharacter({
       name,
@@ -58,7 +60,7 @@ const handlerPostCharacter = async (req, res) => {
     res.status(200).json(newCharacter);
   } catch (error) {
     res.status(404).json({ error: error.message });
-    console.log(error.message);
+    console.log(error);
   }
 };
 
@@ -108,6 +110,17 @@ const handleGetFavorites = async (req, res) => {
   }
 };
 
+const handleFilterCharacters = async (req, res) => {
+  const { gender, status, origin, orderBy } = req.query;
+  try {
+    const response = await filterCharacters(gender, status, origin, orderBy);
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error.message);
+    return res.status(404).json({ error: error.message });
+  }
+};
+
 module.exports = {
   saveApidata,
   handlerGetCharacters,
@@ -117,4 +130,5 @@ module.exports = {
   handlerLikeCharacter,
   handlerDislikeCharacter,
   handleGetFavorites,
+  handleFilterCharacters,
 };

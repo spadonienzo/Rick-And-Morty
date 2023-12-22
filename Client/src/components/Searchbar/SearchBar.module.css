@@ -1,0 +1,28 @@
+.bar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 0px;
+  margin-top: 5em;
+  font-size: 0.8rem;
+}
+
+.buttonsubmit {
+  cursor: pointer;
+  background-color: rgba(25, 25, 25, 0.9);
+  color: aliceblue;
+  border-radius: 30px;
+  border-style: none;
+  width: 7em;
+  height: 2em;
+  font-weight: bold;
+}
+
+.input {
+  color: rgba(25, 25, 25, 0.9);
+  border-radius: 15px;
+  border-style: none;
+  margin-right: 10px;
+  width: 14em;
+  height: 2em;
+}

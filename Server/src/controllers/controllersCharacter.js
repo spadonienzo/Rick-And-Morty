@@ -112,6 +112,43 @@ const getFavorites = async (id) => {
   return characters;
 };
 
+const filterCharacters = async (gender, status, origin, orderBy) => {
+  const characters = await Character.findAll();
+
+  if (origin !== undefined) {
+    // Convert string "true" or "false" to boolean
+    origin = origin === "true";
+  }
+  console.log("origin: ", origin);
+
+  let filteredCharacters = characters.filter((character) => {
+    return (
+      (!gender || character.gender === gender) &&
+      (!status || character.status === status) &&
+      (!origin || character.created === origin)
+    );
+  });
+
+  if (origin === false) {
+    filteredCharacters = filteredCharacters.filter(
+      (character) => character.created !== true
+    );
+  }
+
+  // Order by name
+  if (orderBy === "name-asc") {
+    filteredCharacters = filteredCharacters.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+  } else if (orderBy === "name-desc") {
+    filteredCharacters = filteredCharacters.sort((a, b) =>
+      b.name.localeCompare(a.name)
+    );
+  }
+
+  return filteredCharacters;
+};
+
 module.exports = {
   getCharacters,
   getCharactersByName,
@@ -120,4 +157,5 @@ module.exports = {
   likeCharacter,
   dislikeCharacter,
   getFavorites,
+  filterCharacters,
 };

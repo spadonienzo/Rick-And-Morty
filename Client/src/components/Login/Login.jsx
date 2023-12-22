@@ -6,17 +6,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { validation, isButtonDisabled } from "./validations";
-import { getUsers } from "../../redux/actions";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const users = useSelector((state) => state.users);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
+    if (user == null) {
+      return;
+    }
+    if (user) {
+      navigate("/home");
+    }
+  }, [user, navigate]);
 
   const [errors, setErrors] = useState({});
   const [userData, setData] = useState({
@@ -38,20 +42,20 @@ const Login = () => {
     );
   };
 
+  function handleLoginError(error) {
+    Swal.fire({
+      icon: "error",
+      title: "Please check your credentials!",
+    });
+    setData({
+      email: "",
+      password: "",
+    });
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const userExists = users.find((user) => user.email === userData.email);
-
-    if (userExists) {
-      if (userExists.password === userData.password) {
-        dispatch(login(userData));
-        navigate("/home");
-      } else {
-        alert("Wrong password");
-      }
-    } else {
-      alert("No users registered with this email, try again or Sign up");
-    }
+    dispatch(login(userData, () => handleLoginError()));
   };
 
   return (
@@ -60,6 +64,7 @@ const Login = () => {
         <Form.Group className="mb-3" controlId="email">
           <Form.Label className={style.p}>Email address</Form.Label>
           <Form.Control
+            value={userData.email}
             type="email"
             placeholder="name@example.com"
             onChange={(event) => {
@@ -76,6 +81,7 @@ const Login = () => {
         <Form.Group className="mb-3" controlId="password">
           <Form.Label className={style.p}>Password</Form.Label>
           <Form.Control
+            value={userData.password}
             type="password"
             placeholder="Your password"
             onChange={(event) => {

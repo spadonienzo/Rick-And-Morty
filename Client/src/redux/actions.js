@@ -1,4 +1,9 @@
 import axios from "axios";
+import {
+  getLoggedInUser,
+  handleUserLogin,
+  handleUserLogout,
+} from "../utils/UserUtils";
 
 export const GET_CHARACTERS = "GET_CHARACTERS";
 export const GET_BY_NAME = "GET_BY_NAME";
@@ -8,11 +13,18 @@ export const DELETE_CHARACTER = "DELETE_CHARACTER";
 export const GET_FAVORITES = "GET_FAVORITES";
 export const FAV_CHARACTER = "FAV_CHARACTER";
 export const UNFAV_CHARACTER = "UNFAV_CHARACTER";
+export const DELETE_FAVORITE = "DELETE_FAVORITE";
 export const SIGNUP = "SIGNUP";
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 export const GET_USERS = "GET_USERS";
 export const SET_LOGIN_STATUS = "SET_LOGIN_STATUS";
+export const ORDER_BY_NAME = "ORDER_BY_NAME";
+export const FILTER_BY_ORIGIN = "FILTER_BY_ORIGIN";
+export const FILTER_BY_STATUS = "FILTER_BY_STATUS";
+export const FILTER_BY_GENDER = "FILTER_BY_GENDER";
+export const CLEAR_FILTER = "CLEAR_FILTER";
+export const FETCH_CHARACTERS = "FETCH_CHARACTERS";
 
 export const getCharacter = () => {
   return async function (dispatch) {
@@ -53,6 +65,13 @@ export const deleteCharacter = (id) => {
   };
 };
 
+export const deleteFavorite = (id) => {
+  return {
+    type: "DELETE_FAVORITE",
+    payload: id,
+  };
+};
+
 export const favCharacter = (userId, characterId) => {
   return async function (dispatch) {
     const response = await axios.post(`http://localhost:3001/characters/like`, {
@@ -86,21 +105,20 @@ export const unfavCharacter = (userId, characterId) => {
   };
 };
 
-export const postCharacter = (name, status, species, gender, origin, image) => {
+export const postCharacter = (characterData) => {
   return async function (dispatch) {
-    const response = await axios.post(`http://localhost:3001/characters/`, {
-      name,
-      status,
-      species,
-      gender,
-      origin,
-      image,
-    });
-    console.log(response);
-    alert("Character has been created succesfully");
-    return dispatch({
-      type: "POST_CHARACTER",
-    });
+    try {
+      const response = await axios.post(
+        `http://localhost:3001/characters/`,
+        characterData
+      );
+      console.log(response);
+      return dispatch({
+        type: "POST_CHARACTER",
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 };
 
@@ -126,7 +144,7 @@ export const getUsers = () => {
   };
 };
 
-export const signup = ({ name, email, password }) => {
+export const signup = ({ name, email, password }, handleLoginError) => {
   return async function (dispatch) {
     try {
       const response = await axios.post(`http://localhost:3001/users/signup`, {
@@ -134,45 +152,96 @@ export const signup = ({ name, email, password }) => {
         email,
         password,
       });
-      const user = response.data;
-
+      const token = response.data;
+      handleUserLogin(token);
       dispatch({
         type: "SIGNUP",
-        payload: user,
+        payload: getLoggedInUser(),
       });
-
-      window.localStorage.setItem("user", JSON.stringify(user));
     } catch (error) {
-      alert(error.message);
+      handleLoginError(error);
     }
   };
 };
 
-export const login = ({ email, password }) => {
+export const login = ({ email, password }, handleLoginError) => {
   return async function (dispatch) {
     try {
       const response = await axios.post(`http://localhost:3001/users/login`, {
         email,
         password,
       });
-
-      const user = response.data;
-
+      const token = response.data;
+      handleUserLogin(token);
       dispatch({
         type: "LOGIN",
-        payload: user,
+        payload: getLoggedInUser(),
       });
-
-      window.localStorage.setItem("user", JSON.stringify(user));
     } catch (error) {
-      alert(error.message);
+      handleLoginError(error);
     }
   };
 };
 
 export const logout = () => {
+  handleUserLogout();
+  return { type: "LOGOUT" };
+};
+
+export const orderByName = (value) => {
+  return {
+    type: ORDER_BY_NAME,
+    payload: value,
+  };
+};
+
+export const filterByOrigin = (origin) => {
+  return {
+    type: FILTER_BY_ORIGIN,
+    payload: origin,
+  };
+};
+
+export const filterByStatus = (status) => {
+  return {
+    type: FILTER_BY_STATUS,
+    payload: status,
+  };
+};
+
+export const filterByGender = (gender) => {
+  return {
+    type: FILTER_BY_GENDER,
+    payload: gender,
+  };
+};
+
+export const clearFilter = (value) => {
+  return {
+    type: CLEAR_FILTER,
+    payload: value,
+  };
+};
+
+export const fetchCharacters = (gender, status, origin, orderBy) => {
+  console.log("entro a la funcion");
   return async function (dispatch) {
-    dispatch({ type: "LOGOUT" });
-    window.localStorage.removeItem("user");
+    try {
+      const response = await axios.get("http://localhost:3001/users/filter", {
+        params: {
+          gender,
+          status,
+          origin,
+          orderBy,
+        },
+      });
+
+      dispatch({
+        type: FETCH_CHARACTERS,
+        payload: response.data,
+      });
+    } catch (error) {
+      console.error("Error fetching characters:", error);
+    }
   };
 };

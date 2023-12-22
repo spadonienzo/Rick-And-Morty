@@ -1,17 +1,35 @@
-import { useState } from "react"
+import React, { useState } from "react";
+import style from "./SearchBar.module.css";
+import { getCharacterByName } from "../../redux/actions";
+import { useDispatch } from "react-redux";
 
-export default function SearchBar({onSearch}) {
-   
-   const [id, setId] = useState('')
-   
-   const handleChange = (event) => { // el event es todo, desp esta target q es el input en si y event.target.value es el input.value
-      setId(event.target.value)
-   }
-   
-   return (
-      <div>
-         <input type='search' onChange={handleChange} value={id}/>
-         <button onClick={() => (onSearch(id),setId(''))}>Agregar</button>
-      </div>
-   )
+export default function SearchBar() {
+  const dispatch = useDispatch();
+  const [searchCharacter, setSearchCharacter] = useState("");
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    setSearchCharacter(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatch(getCharacterByName(searchCharacter));
+    setSearchCharacter("");
+  };
+
+  return (
+    <div className={style.bar}>
+      <form onChange={(event) => handleChange(event)}>
+        <input type="search" className={style.input} value={searchCharacter} />
+        <button
+          className={style.buttonsubmit}
+          type="submit"
+          onClick={handleSubmit}
+        >
+          Search
+        </button>
+      </form>
+    </div>
+  );
 }
