@@ -26,7 +26,15 @@ const Signup = () => {
       return;
     }
     if (user) {
-      navigate("/home");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "The user has been created succesfully!",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        navigate("/home");
+      });
     }
   }, [user, navigate]);
 

@@ -17,10 +17,10 @@ const Filters = () => {
   const origin = useSelector((state) => state.origin);
   const orderBy = useSelector((state) => state.orderBy);
 
+  const [nameOrder, setNameOrder] = useState("DEFAULT");
   const [originFilter, setOriginFilter] = useState("ALL");
   const [genderFilter, setGenderFilter] = useState("ALL");
   const [statusFilter, setStatusFilter] = useState("ALL");
-  const [nameOrder, setNameOrder] = useState("DEFAULT");
 
   const handleOrderName = (event) => {
     event.preventDefault();
@@ -51,14 +51,23 @@ const Filters = () => {
   const handleClearFilter = (event) => {
     event.preventDefault();
 
-    // Reset state and dispatch actions with default values
+    // Reset local state
+    setNameOrder("DEFAULT");
     setOriginFilter("ALL");
     setGenderFilter("ALL");
     setStatusFilter("ALL");
-    setNameOrder("DEFAULT");
 
+    dispatch(filterByOrigin(null));
+    dispatch(filterByGender(null));
+    dispatch(filterByStatus(null));
+    dispatch(orderByName("DEFAULT"));
     dispatch(getCharacter());
     dispatch(clearFilter());
+
+    document.getElementById("originSelect").value = "";
+    document.getElementById("genderSelect").value = "";
+    document.getElementById("statusSelect").value = "";
+    document.getElementById("orderBySelect").value = "";
   };
 
   return (
@@ -69,6 +78,7 @@ const Filters = () => {
       <div className={style.filtertitles}>FILTER BY : </div>
       <div>
         <select
+          id="originSelect"
           value={origin}
           className={style.selection}
           onChange={handleFilterByOrigin}
@@ -78,6 +88,7 @@ const Filters = () => {
           <option value={true}>CREATED</option>
         </select>
         <select
+          id="genderSelect"
           value={gender}
           className={style.selection}
           onChange={handleFilterByGender}
@@ -88,6 +99,7 @@ const Filters = () => {
           <option value="unknown">UNKNOWN</option>
         </select>
         <select
+          id="statusSelect"
           value={status}
           className={style.selection}
           onChange={handleFilterByStatus}
@@ -101,6 +113,7 @@ const Filters = () => {
       <div className={style.filtertitles}>SORT BY : </div>
       <div>
         <select
+          id="orderBySelect"
           value={orderBy}
           className={style.selection}
           onChange={handleOrderName}

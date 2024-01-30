@@ -27,8 +27,8 @@ const Home = () => {
   const currentCharacters = characters.slice(startIndex, endIndex);
 
   useEffect(() => {
-    if (characters.length < 1) dispatch(getCharacter());
-  }, [dispatch, characters]);
+    dispatch(fetchCharacters(gender, status, origin, orderBy));
+  }, [gender, status, origin, orderBy, dispatch]);
 
   useEffect(() => {
     const user = JSON.parse(window.localStorage.getItem("user"));
@@ -43,12 +43,7 @@ const Home = () => {
     dispatch(deleteCharacter(id));
   };
 
-  useEffect(() => {
-    // Call the fetchCharacters action with the current filter parameters
-    dispatch(fetchCharacters(gender, status, origin, orderBy));
-  }, [gender, status, origin, orderBy, dispatch]);
-
-  console.log(characters);
+  console.log(characters.length);
 
   if (characters.length) {
     // Render your component content that relies on user data
@@ -66,7 +61,13 @@ const Home = () => {
       </div>
     );
   } else {
-    return <h2 className={style.loading}>LOADING ...</h2>;
+    return (
+      <div className={style.home}>
+        <SearchBar />
+        <Filters />
+        <h2 className={style.loading}>NO CHARACTERS FOUND ...</h2>;
+      </div>
+    );
   }
 };
 

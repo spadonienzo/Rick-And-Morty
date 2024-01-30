@@ -18,7 +18,15 @@ const Login = () => {
       return;
     }
     if (user) {
-      navigate("/home");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "User logged succesfully!",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        navigate("/home");
+      });
     }
   }, [user, navigate]);
 

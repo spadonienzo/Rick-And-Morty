@@ -26,7 +26,11 @@ const Detail = () => {
               <span className={style.name}>{character.name.toUpperCase()}</span>
             </div>
             <div className={style.container_data}>
-              <img src={character.image} alt={character.name} className="img" />
+              <img
+                src={character.image}
+                alt={character.name}
+                className={style.img}
+              />
               <div className={style.extbox}>
                 <p>Origin: {character.origin}</p>
                 <p>Species: {character.species}</p>

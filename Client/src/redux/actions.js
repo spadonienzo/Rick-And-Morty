@@ -224,7 +224,6 @@ export const clearFilter = (value) => {
 };
 
 export const fetchCharacters = (gender, status, origin, orderBy) => {
-  console.log("entro a la funcion");
   return async function (dispatch) {
     try {
       const response = await axios.get("http://localhost:3001/users/filter", {
