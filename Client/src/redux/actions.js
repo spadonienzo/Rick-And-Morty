@@ -28,7 +28,7 @@ export const FETCH_CHARACTERS = "FETCH_CHARACTERS";
 
 export const getCharacter = () => {
   return async function (dispatch) {
-    const response = await axios(`http://localhost:3001/characters/`);
+    const response = await axios(`/characters/`);
     return dispatch({
       type: "GET_CHARACTERS",
       payload: response.data,
@@ -38,9 +38,7 @@ export const getCharacter = () => {
 
 export const getCharacterByName = (name) => {
   return async function (dispatch) {
-    const response = await axios(
-      `http://localhost:3001/characters/?name=${name}`
-    );
+    const response = await axios(`/characters/?name=${name}`);
     return dispatch({
       type: "GET_BY_NAME",
       payload: response.data,
@@ -50,7 +48,7 @@ export const getCharacterByName = (name) => {
 
 export const getCharacterById = (id) => {
   return async function (dispatch) {
-    const response = await axios(`http://localhost:3001/characters/${id}`);
+    const response = await axios(`/characters/${id}`);
     return dispatch({
       type: "GET_BY_ID",
       payload: response.data,
@@ -74,7 +72,7 @@ export const deleteFavorite = (id) => {
 
 export const favCharacter = (userId, characterId) => {
   return async function (dispatch) {
-    const response = await axios.post(`http://localhost:3001/characters/like`, {
+    const response = await axios.post(`/characters/like`, {
       userId,
       characterId,
     });
@@ -89,7 +87,7 @@ export const unfavCharacter = (userId, characterId) => {
   return async function (dispatch) {
     try {
       console.log(userId, characterId);
-      await axios.delete(`http://localhost:3001/characters/dislike`, {
+      await axios.delete(`/characters/dislike`, {
         data: {
           userId,
           characterId,
@@ -108,10 +106,7 @@ export const unfavCharacter = (userId, characterId) => {
 export const postCharacter = (characterData) => {
   return async function (dispatch) {
     try {
-      const response = await axios.post(
-        `http://localhost:3001/characters/`,
-        characterData
-      );
+      const response = await axios.post(`/characters/`, characterData);
       console.log(response);
       return dispatch({
         type: "POST_CHARACTER",
@@ -124,9 +119,7 @@ export const postCharacter = (characterData) => {
 
 export const getFavorites = (id) => {
   return async function (dispatch) {
-    const response = await axios(
-      `http://localhost:3001/characters/favorites/${id}`
-    );
+    const response = await axios(`/characters/favorites/${id}`);
     return dispatch({
       type: "GET_FAVORITES",
       payload: response.data,
@@ -136,7 +129,7 @@ export const getFavorites = (id) => {
 
 export const getUsers = () => {
   return async function (dispatch) {
-    const response = await axios(`http://localhost:3001/users/`);
+    const response = await axios(`/users/`);
     return dispatch({
       type: "GET_USERS",
       payload: response.data,
@@ -147,7 +140,7 @@ export const getUsers = () => {
 export const signup = ({ name, email, password }, handleLoginError) => {
   return async function (dispatch) {
     try {
-      const response = await axios.post(`http://localhost:3001/users/signup`, {
+      const response = await axios.post(`/users/signup`, {
         name,
         email,
         password,
@@ -167,7 +160,7 @@ export const signup = ({ name, email, password }, handleLoginError) => {
 export const login = ({ email, password }, handleLoginError) => {
   return async function (dispatch) {
     try {
-      const response = await axios.post(`http://localhost:3001/users/login`, {
+      const response = await axios.post(`/users/login`, {
         email,
         password,
       });
@@ -226,7 +219,7 @@ export const clearFilter = (value) => {
 export const fetchCharacters = (gender, status, origin, orderBy) => {
   return async function (dispatch) {
     try {
-      const response = await axios.get("http://localhost:3001/users/filter", {
+      const response = await axios.get("/users/filter", {
         params: {
           gender,
           status,
