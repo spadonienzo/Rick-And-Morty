@@ -6,13 +6,13 @@ import axios from "axios";
 import { useEffect } from "react";
 
 const Landing = () => {
-  useEffect(() => {
-    const petition = async () => {
-      const response = await axios.get("/characters/save");
-      console.log(response);
-    };
-    petition();
-  }, []);
+  // useEffect(() => {
+  //   const petition = async () => {
+  //     const response = await axios.get("/characters/save");
+  //     console.log(response);
+  //   };
+  //   petition();
+  // }, []);
 
   return (
     <div>
