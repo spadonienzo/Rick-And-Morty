@@ -53,7 +53,7 @@ const getCharactersByName = async (name) => {
     character.name.toLowerCase().includes(name.toLowerCase())
   );
   if (!filteredCharacter)
-    return "That character does not exist in the database";
+    return "That charachter does not exist in the database";
   return filteredCharacter;
 };
 
@@ -115,80 +115,38 @@ const getFavorites = async (id) => {
 const filterCharacters = async (gender, status, origin, orderBy) => {
   const characters = await Character.findAll();
 
-  if (!characters) {
-    let i = 1;
-    let characters = []; //[Promise<pending>,Promise<pending>,Promise<pending>,Promise<pending>,Promise<pending>]
-
-    while (i < 6) {
-      let apiData = await axios(
-        `https://rickandmortyapi.com/api/character?page=${i}`
-      );
-
-      //El llamado a la api me devuelve una promesa, entonces lo que tengo en charactaers un array de promesas
-      characters.push(apiData);
-      i++;
-    }
-
-    //Aqui voy a tener un array donde va a estar la información de la api, le aplico promise all para que se resuelvan todas las promesas. Y después lo mapeo.
-    characters = (await Promise.all(characters)).map((res) =>
-      res.data.results.map((char) => {
-        return {
-          id: char.id,
-          name: char.name,
-          status: char.status,
-          species: char.species,
-          gender: char.gender,
-          origin: char.origin.name,
-          image: char.image,
-          created: false,
-        };
-      })
-    );
-
-    //AL APLICAR DOS MAP OBTENGO UN ARRAY DENTRO DE OTRO ARRAY. Una forma de solucinarlo es:
-
-    let apiCharacters = [];
-    characters.map((char) => {
-      apiCharacters = apiCharacters.concat(char);
-    });
-
-    let dbCharacters = await Character.findAll();
-
-    return dbCharacters;
-  } else {
-    if (origin !== undefined) {
-      // Convert string "true" or "false" to boolean
-      origin = origin === "true";
-    }
-    console.log("origin: ", origin);
-
-    let filteredCharacters = characters.filter((character) => {
-      return (
-        (!gender || character.gender === gender) &&
-        (!status || character.status === status) &&
-        (!origin || character.created === origin)
-      );
-    });
-
-    if (origin === false) {
-      filteredCharacters = filteredCharacters.filter(
-        (character) => character.created !== true
-      );
-    }
-
-    // Order by name
-    if (orderBy === "name-asc") {
-      filteredCharacters = filteredCharacters.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-    } else if (orderBy === "name-desc") {
-      filteredCharacters = filteredCharacters.sort((a, b) =>
-        b.name.localeCompare(a.name)
-      );
-    }
-
-    return filteredCharacters;
+  if (origin !== undefined) {
+    // Convert string "true" or "false" to boolean
+    origin = origin === "true";
   }
+  console.log("origin: ", origin);
+
+  let filteredCharacters = characters.filter((character) => {
+    return (
+      (!gender || character.gender === gender) &&
+      (!status || character.status === status) &&
+      (!origin || character.created === origin)
+    );
+  });
+
+  if (origin === false) {
+    filteredCharacters = filteredCharacters.filter(
+      (character) => character.created !== true
+    );
+  }
+
+  // Order by name
+  if (orderBy === "name-asc") {
+    filteredCharacters = filteredCharacters.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+  } else if (orderBy === "name-desc") {
+    filteredCharacters = filteredCharacters.sort((a, b) =>
+      b.name.localeCompare(a.name)
+    );
+  }
+
+  return filteredCharacters;
 };
 
 module.exports = {
