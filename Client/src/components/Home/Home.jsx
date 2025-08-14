@@ -6,7 +6,6 @@ import SearchBar from "../Searchbar/SearchBar";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import {
-  getCharacter,
   deleteCharacter,
   getFavorites,
   fetchCharacters,
@@ -42,8 +41,6 @@ const Home = () => {
   const onClose = (id) => {
     dispatch(deleteCharacter(id));
   };
-
-  console.log(characters.length);
 
   if (characters.length) {
     // Render your component content that relies on user data

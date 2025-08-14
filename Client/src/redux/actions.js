@@ -137,7 +137,7 @@ export const getUsers = () => {
   };
 };
 
-export const signup = ({ name, email, password }, handleLoginError) => {
+export const signup = ({ name, email, password }, handleSignupError) => {
   return async function (dispatch) {
     try {
       const response = await axios.post(`/users/signup`, {
@@ -152,7 +152,7 @@ export const signup = ({ name, email, password }, handleLoginError) => {
         payload: getLoggedInUser(),
       });
     } catch (error) {
-      handleLoginError(error);
+      handleSignupError(error);
     }
   };
 };

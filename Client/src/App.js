@@ -12,7 +12,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Nav from "./components/Nav/Nav";
 import Create from "./components/Create/Create";
 import axios from "axios";
-axios.defaults.baseURL = `https://rick-and-morty-production-a220.up.railway.app`;
+axios.defaults.baseURL = `http://localhost:3001`;
 
 const App = () => {
   const location = useLocation();

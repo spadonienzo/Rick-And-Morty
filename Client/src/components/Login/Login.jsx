@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import style from "./Login.module.css";
@@ -14,10 +14,7 @@ const Login = () => {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (user == null) {
-      return;
-    }
-    if (user) {
+    if (user && user.id) {
       Swal.fire({
         position: "center",
         icon: "success",
@@ -50,7 +47,7 @@ const Login = () => {
     );
   };
 
-  function handleLoginError(error) {
+  function handleLoginError() {
     Swal.fire({
       icon: "error",
       title: "Please check your credentials!",
@@ -59,11 +56,12 @@ const Login = () => {
       email: "",
       password: "",
     });
+    setErrors({});
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(login(userData, () => handleLoginError()));
+    dispatch(login(userData, handleLoginError));
   };
 
   return (
@@ -78,7 +76,7 @@ const Login = () => {
             onChange={(event) => {
               handleChange("email", event.target.value);
             }}
-            isInvalid={errors.email}
+            isInvalid={!!errors.email}
             isValid={userData.email && !errors.email}
           />
           <Form.Control.Feedback type="invalid">

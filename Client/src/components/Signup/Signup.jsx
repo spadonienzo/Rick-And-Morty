@@ -21,11 +21,10 @@ const Signup = () => {
   });
   const [errors, setErrors] = useState(validation(userData));
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    if (user == null) {
-      return;
-    }
-    if (user) {
+    if (user && user.id) {
       Swal.fire({
         position: "center",
         icon: "success",
@@ -52,7 +51,7 @@ const Signup = () => {
     );
   };
 
-  function handleLoginError(error) {
+  function handleSignupError(error) {
     Swal.fire({
       icon: "error",
       title: "User already exists",
@@ -62,11 +61,18 @@ const Signup = () => {
       password: "",
       name: "",
     });
+    setErrors({});
   }
 
   const handleSignup = async (event) => {
     event.preventDefault();
-    dispatch(signup(userData, handleLoginError));
+    setLoading(true);
+    dispatch(
+      signup(userData, (err) => {
+        handleSignupError(err);
+        setLoading(false);
+      })
+    ).finally(() => setLoading(false));
   };
 
   return (
@@ -81,7 +87,7 @@ const Signup = () => {
             onChange={(event) => {
               handleChange("name", event.target.value);
             }}
-            isInvalid={errors.name}
+            isInvalid={!!errors.name}
             isValid={userData.name && !errors.name}
           />
           <Form.Control.Feedback type="invalid">
@@ -134,9 +140,9 @@ const Signup = () => {
           <Button
             type="submit"
             className={style.button}
-            disabled={isButtonDisabled(errors, userData)}
+            disabled={loading || isButtonDisabled(errors, userData)}
           >
-            Sign Up
+            {loading ? "Signing Up..." : "Sign Up"}
           </Button>
         </div>
       </Form>

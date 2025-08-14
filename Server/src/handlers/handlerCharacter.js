@@ -47,7 +47,6 @@ const handlerGetCharacterById = async (req, res) => {
 
 const handlerPostCharacter = async (req, res) => {
   const { name, status, species, gender, origin, image } = req.body;
-  console.log(req.body);
   try {
     const newCharacter = await postCharacter({
       name,

@@ -6,7 +6,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import logoNav from "../../resources/logoNav.png";
 import { Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logout } from "../../redux/actions";
 
 const Nav = () => {
