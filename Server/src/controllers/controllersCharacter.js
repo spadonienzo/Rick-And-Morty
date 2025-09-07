@@ -1,4 +1,4 @@
-const axios = require("axios");
+// const axios = require("axios");
 const { Character, User, Likes } = require("../DB_connection");
 
 const getCharacters = async () => {
@@ -49,10 +49,10 @@ const getCharacters = async () => {
 
 const getCharactersByName = async (name) => {
   const characters = getCharacters();
-  console.log(characters);
   const filteredCharacter = (await characters).filter((character) =>
     character.name.toLowerCase().includes(name.toLowerCase())
   );
+
   if (!filteredCharacter)
     return "That character does not exist in the database";
   return filteredCharacter;
@@ -78,7 +78,6 @@ const postCharacter = async ({
 };
 
 const deleteCharacter = async (id) => {
-  console.log("entro al id");
   const character = await Character.findOne({ where: { id } });
   if (!character) throw new Error("No character matches that id");
   character.destroy();
@@ -120,7 +119,6 @@ const filterCharacters = async (gender, status, origin, orderBy) => {
     // Convert string "true" or "false" to boolean
     origin = origin === "true";
   }
-  console.log("origin: ", origin);
 
   let filteredCharacters = characters.filter((character) => {
     return (
