@@ -20,12 +20,27 @@ const Nav = () => {
   };
 
   return (
-    <Navbar fixed="top" bg="white" variant="light" className={style.nav}>
+    <Navbar
+      expand="md"
+      fixed="top"
+      bg="white"
+      variant="light"
+      className={style.nav}
+    >
       <Container>
+        {/* Logo */}
         <Navbar.Brand href="/home">
-          <Image className={style.logo} src={logoNav} />
+          <Image className={style.logo} src={logoNav} alt="App Logo" />
         </Navbar.Brand>
-        <Navbar.Collapse className="justify-content-end">
+
+        {/* Toggle button for mobile */}
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+
+        {/* Collapsible links */}
+        <Navbar.Collapse
+          id="responsive-navbar-nav"
+          className="justify-content-end"
+        >
           <Navs className="me-auto">
             <Navs.Link href="/home" className={style.font}>
               Home
@@ -40,12 +55,18 @@ const Nav = () => {
               Create
             </Navs.Link>
           </Navs>
+
+          {/* User dropdown */}
+          <NavDropdown
+            align="end"
+            className={style.font}
+            title={user?.name || "Account"}
+          >
+            <NavDropdown.Item className={style.font} onClick={handleLogOut}>
+              Log Out
+            </NavDropdown.Item>
+          </NavDropdown>
         </Navbar.Collapse>
-        <NavDropdown className={style.font} title={user?.name}>
-          <NavDropdown.Item className={style.font} onClick={handleLogOut}>
-            Log Out
-          </NavDropdown.Item>
-        </NavDropdown>
       </Container>
     </Navbar>
   );

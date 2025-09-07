@@ -24,31 +24,39 @@ const About = () => {
 
   return (
     <div className={style.about}>
-      <h2>About Me</h2>
-      <p>{developerInfo.aboutMe}</p>
+      <h2 className={style.title}>About Me</h2>
+      <p className={style.description}>{developerInfo.aboutMe}</p>
 
-      <h3>Skills</h3>
-      <div className={style.divskills}>
-        <img src={logoBootstrap} className={style.img} alt="Bootstrap" />
-        <img src={logoCss} className={style.img} alt="CSS" />
-        <img src={logoHtml} className={style.img} alt="HTML" />
-        <img src={logoJs} className={style.img} alt="JavaScript" />
-        <img src={logoMysql} className={style.img} alt="MySql" />
-        <img src={logoNode} className={style.img} alt="Node.js" />
-        <img src={logoPostgre} className={style.img} alt="Postgre" />
-        <img src={logoReact} className={style.img} alt="React.js" />
+      <h3 className={style.subtitle}>Skills</h3>
+      <div className={style.skillsGrid}>
+        <img src={logoBootstrap} alt="Bootstrap" />
+        <img src={logoCss} alt="CSS" />
+        <img src={logoHtml} alt="HTML" />
+        <img src={logoJs} alt="JavaScript" />
+        <img src={logoMysql} alt="MySql" />
+        <img src={logoNode} alt="Node.js" />
+        <img src={logoPostgre} alt="Postgre" />
+        <img src={logoReact} alt="React.js" />
       </div>
 
-      <h3>Contact Information</h3>
-      <div className={style.divcontact}>
-        <a href={`mailto:${developerInfo.contact.email}`}>
-          <img src={logoGmail} className={style.img} />
+      <h3 className={style.subtitle}>Contact Information</h3>
+      <div className={style.contact}>
+        <a
+          href={`mailto:${developerInfo.contact.email}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src={logoGmail} alt="Gmail" />
         </a>
-        <a href={developerInfo.contact.github}>
-          <img src={logoGit} className={style.img} />
+        <a href={developerInfo.contact.github} target="_blank" rel="noreferrer">
+          <img src={logoGit} alt="GitHub" />
         </a>
-        <a href={developerInfo.contact.linkedin}>
-          <img src={logoLinkedin} className={style.img} />
+        <a
+          href={developerInfo.contact.linkedin}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src={logoLinkedin} alt="LinkedIn" />
         </a>
       </div>
     </div>

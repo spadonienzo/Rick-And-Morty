@@ -4,18 +4,10 @@ import logo from "../../resources/logo.png";
 import { Link } from "react-router-dom";
 
 const Landing = () => {
-  // useEffect(() => {
-  //   const petition = async () => {
-  //     const response = await axios.get("/characters/save");
-  //     console.log(response);
-  //   };
-  //   petition();
-  // }, []);
-
   return (
-    <div>
+    <div className={style.page}>
       <div>
-        <img src={logo} alt="" className={style.img} />
+        <img src={logo} alt="logo" className={style.img} />
       </div>
       <div className={style.container}>
         <Link to="/login">
