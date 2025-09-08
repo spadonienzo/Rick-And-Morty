@@ -10,10 +10,10 @@
     "node": "22.x"
   },
   "scripts": {
-    "start": "node ./src/server.js",
-    "server": "nodemon ./src/server.js",
-    "client": "npm run start --prefix ../client",
-    "dev": "concurrently \"npm run server\" \"npm run client\" "
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "keywords": [],
   "author": "",
