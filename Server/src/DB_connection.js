@@ -1,14 +1,20 @@
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
 const UserModel = require("./models/User");
 const CharacterModel = require("./models/Character");
 const LikesModel = require("./models/Likes");
 
-const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
-  { logging: false, native: false }
-);
+// Conexión usando DATABASE_URL y forzando SSL (Render lo requiere)
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  logging: false,
+  native: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
+});
 
 UserModel(sequelize);
 CharacterModel(sequelize);
@@ -19,9 +25,5 @@ User.belongsToMany(Character, { through: Likes });
 Character.belongsToMany(User, { through: Likes });
 Likes.belongsTo(Character, { foreignKey: "CharacterId" });
 
-module.exports = {
-  User,
-  Character,
-  Likes,
-  conn: sequelize,
-};
+module.exports = { User, Character, Likes, conn: sequelize };
+
