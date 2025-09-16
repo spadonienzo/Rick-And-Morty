@@ -25,6 +25,8 @@ const Home = () => {
   const startIndex = endIndex - itemsPerPage;
   const currentCharacters = characters.slice(startIndex, endIndex);
 
+  console.log(characters);
+
   useEffect(() => {
     dispatch(fetchCharacters(gender, status, origin, orderBy));
   }, [gender, status, origin, orderBy, dispatch]);
