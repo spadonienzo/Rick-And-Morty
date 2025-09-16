@@ -28,7 +28,7 @@ export const FETCH_CHARACTERS = "FETCH_CHARACTERS";
 
 export const getCharacter = () => {
   return async function (dispatch) {
-    const response = await axios(`/characters/`);
+    const response = await axios(`/characters/save`);
     return dispatch({
       type: "GET_CHARACTERS",
       payload: response.data,
