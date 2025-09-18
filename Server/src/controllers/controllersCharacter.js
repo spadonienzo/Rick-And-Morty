@@ -1,4 +1,4 @@
-// const axios = require("axios");
+const axios = require("axios");
 const { Character, User, Likes } = require("../DB_connection");
 
 const getCharacters = async () => {
