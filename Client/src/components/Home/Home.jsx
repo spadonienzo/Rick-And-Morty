@@ -9,7 +9,6 @@ import {
   deleteCharacter,
   getFavorites,
   fetchCharacters,
-  getCharacter,
 } from "../../redux/actions";
 
 const Home = () => {
@@ -29,12 +28,8 @@ const Home = () => {
   console.log(characters);
 
   useEffect(() => {
-    dispatch(getCharacter);
-  }, [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(fetchCharacters(gender, status, origin, orderBy));
-  // }, [gender, status, origin, orderBy, dispatch]);
+    dispatch(fetchCharacters(gender, status, origin, orderBy));
+  }, [gender, status, origin, orderBy, dispatch]);
 
   useEffect(() => {
     const user = JSON.parse(window.localStorage.getItem("user"));

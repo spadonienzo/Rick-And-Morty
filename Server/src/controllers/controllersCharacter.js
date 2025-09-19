@@ -2,49 +2,49 @@ const axios = require("axios");
 const { Character, User, Likes } = require("../DB_connection");
 
 const getCharacters = async () => {
-  let i = 1;
-  let characters = []; //[Promise<pending>,Promise<pending>,Promise<pending>,Promise<pending>,Promise<pending>]
+  // let i = 1;
+  // let characters = []; //[Promise<pending>,Promise<pending>,Promise<pending>,Promise<pending>,Promise<pending>]
 
-  while (i < 6) {
-    let apiData = await axios(
-      `https://rickandmortyapi.com/api/character?page=${i}`
-    );
+  // while (i < 6) {
+  //   let apiData = await axios(
+  //     `https://rickandmortyapi.com/api/character?page=${i}`
+  //   );
 
-    //El llamado a la api me devuelve una promesa, entonces lo que tengo en charactaers un array de promesas
-    characters.push(apiData);
-    i++;
-  }
+  //El llamado a la api me devuelve una promesa, entonces lo que tengo en charactaers un array de promesas
+  //   characters.push(apiData);
+  //   i++;
+  // }
 
   //Aqui voy a tener un array donde va a estar la información de la api, le aplico promise all para que se resuelvan todas las promesas. Y después lo mapeo.
-  characters = (await Promise.all(characters)).map((res) =>
-    res.data.results.map((char) => {
-      return {
-        id: char.id,
-        name: char.name,
-        status: char.status,
-        species: char.species,
-        gender: char.gender,
-        origin: char.origin.name,
-        image: char.image,
-        created: false,
-      };
-    })
-  );
+  // characters = (await Promise.all(characters)).map((res) =>
+  //   res.data.results.map((char) => {
+  //     return {
+  //       id: char.id,
+  //       name: char.name,
+  //       status: char.status,
+  //       species: char.species,
+  //       gender: char.gender,
+  //       origin: char.origin.name,
+  //       image: char.image,
+  //       created: false,
+  //     };
+  //   })
+  // );
 
   //AL APLICAR DOS MAP OBTENGO UN ARRAY DENTRO DE OTRO ARRAY. Una forma de solucinarlo es:
 
-  let apiCharacters = [];
-  characters.map((char) => {
-    apiCharacters = apiCharacters.concat(char);
-  });
+  // let apiCharacters = [];
+  // characters.map((char) => {
+  //   apiCharacters = apiCharacters.concat(char);
+  // });
 
   // DB
 
-  // let dbCharacters = await Character.findAll();
+  let dbCharacters = await Character.findAll();
 
-  return apiCharacters;
+  // return apiCharacters;
 
-  // return dbCharacters;
+  return dbCharacters;
 };
 
 const getCharactersByName = async (name) => {
